@@ -10,6 +10,7 @@ const postRoute = require("./routes/posts")
 const categoryRoute = require("./routes/categories")
 dotenv.config();
 app.use(express.json());
+app.use("/images", express.static(path.join(__dirname, "/images")))
 mongoose.connect(process.env.MONGO_URL,{
     useNewUrlParser:true,
     useUnifiedTopology:true
@@ -19,7 +20,7 @@ const storage = multer.diskStorage({
         cb(null, "images");
     },
     filename:(req, file, cb)=> {
-        cb(null, `${file.originalname}`);
+        cb(null, req.body.name);
     }
 })
 const allowCrossDomain = function(req, res, next) {
