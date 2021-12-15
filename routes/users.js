@@ -2,9 +2,10 @@ const router = require("express").Router();
 const User = require("../models/User");
 const Post = require("../models/Post");
 const bcrypt = require("bcrypt");
+const checkAuth = require("../middlewares/check-auth");
 
 //UPDATE
-router.put("/:id", async (req, res) => {
+router.put("/:id", checkAuth, async (req, res) => {
   if(req.body.userId === req.params.id){
       if(req.body.password){
           const salt = await bcrypt.genSalt(10);
@@ -24,7 +25,7 @@ router.put("/:id", async (req, res) => {
 });
 
 //DELETE
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", checkAuth, async (req, res) => {
     if(req.body.userId === req.params.id){
         try{
             const user = await User.findById(req.params.id);
@@ -45,7 +46,7 @@ router.delete("/:id", async (req, res) => {
   });
 
 //GET USER 
-router.get("/:id", async (req, res) =>{
+router.get("/:id", checkAuth, async (req, res) =>{
     try{
         const user = await User.findById(req.params.id);
         const { password, ...others } = user._doc;

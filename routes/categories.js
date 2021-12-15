@@ -1,7 +1,8 @@
 const router = require("express").Router();
 const Category = require("../models/Category");
+const checkAuth = require("../middlewares/check-auth");
 
-router.post('/', async (req,res) => {
+router.post('/', checkAuth, async (req,res) => {
     const newCat = new Category(req.body)
     try {
         const savedCat = await newCat.save()

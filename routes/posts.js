@@ -1,9 +1,10 @@
 const router = require("express").Router();
 const User = require("../models/User");
 const Post = require("../models/Post");
+const checkAuth = require("../middlewares/check-auth");
 
 //CREATE POST
-router.post("/", async (req, res) => {
+router.post("/", checkAuth, async (req, res) => {
     const newPost = new Post(req.body)
     try {
         const savedPost = await newPost.save();
@@ -14,7 +15,7 @@ router.post("/", async (req, res) => {
 });
 
 //UPDATE POST
-router.put("/:id", async (req, res) => {
+router.put("/:id", checkAuth, async (req, res) => {
     try {
         const post = await Post.findById(req.params.id);
         if (post.username === req.body.username) {
@@ -39,7 +40,7 @@ router.put("/:id", async (req, res) => {
   });
 
 //DELETE POST  
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", checkAuth, async (req, res) => {
     try {
         const post = await Post.findById(req.params.id);
         if (post.username === req.body.username) {
